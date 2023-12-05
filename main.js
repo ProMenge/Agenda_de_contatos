@@ -2,6 +2,7 @@
 //Variavies de escopo global - que vão ser usadas em todo código
 
 const form = document.getElementById('form-atividade')
+const formRemocao = document.getElementById('form-remocao')
 let linhas = '';
 const contatos = [];
 const numeros = [];
@@ -13,6 +14,12 @@ form.addEventListener('submit', function(e){
 
     adicionaLinha();
     atualizaTabela();
+});
+
+formRemocao.addEventListener('submit', function(e){
+    e.preventDefault();
+
+    removeLinha();
 });
 
 function adicionaLinha() {
@@ -49,5 +56,32 @@ function atualizaTabela(){
     corpoTabela.innerHTML = linhas;
 }
 
+function removeLinha() {
+    const inputRemoverNumero = document.getElementById('numero-remocao');
+    const numeroParaRemover = inputRemoverNumero.value;
+    const indice = numeros.indexOf(numeroParaRemover);
 
+    if (indice > -1) {
+        // Remove o contato e o número das arrays
+        contatos.splice(indice, 1);
+        numeros.splice(indice, 1);
+
+        // Reconstrói as linhas
+        linhas = '';
+        for (let i = 0; i < contatos.length; i++) {
+            let linha = '<tr>';
+            linha += `<td> ${contatos[i]}</td>`
+            linha += `<td> ${numeros[i]}</td>`
+            linha += '</tr>'
+            linhas += linha;
+        }
+
+        // Atualiza a tabela
+        atualizaTabela();
+    } else {
+        alert(`O número: ${numeroParaRemover} não foi encontrado.`);
+    }
+
+    inputRemoverNumero.value = '';
+}
 
